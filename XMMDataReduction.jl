@@ -39,10 +39,7 @@ EMOS1Evts = filter(x -> occursin("EMOS1", x), EvFiles)
 EMOS2Evts = filter(x -> occursin("EMOS2", x), EvFiles)
 EPNEvts = filter(x -> occursin("EPN", x), EvFiles)
 
-#printing some information about the observation here may be usefull. Eg observation ID,
-    #Loaction, Name?, number of exposures for each instrument and exposure time
-
-#I can then apply the standard filters to each of the files which are different for EMOS and EPN
+#Apply the standard filters to each of the files which are different for EMOS and EPN
 for n in eachindex(EMOSEvts);
     EMOS=EMOSEvts[n]
     EMOSSplit = split(EMOS,"_")
@@ -67,6 +64,8 @@ for n in eachindex(FiltFiles);
     run(`evselect table=$Filt withrateset=Y rateset=$FiltName maketimecolumn=Y timebinsize=100 makeratecolumn=yes`)
 end
 
+#printing some information about the observation here may be usefull. Eg observation ID,
+    #Loaction, Name?, number of exposures for each instrument and exposure time
 #There must be a better way to do this but this sets some conditiononing on if there is more than
 #one exposure per observation (currently just for correct text pluralisation)
 
