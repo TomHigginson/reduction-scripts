@@ -32,7 +32,7 @@ withenv("SAS_CCFPATH"=>"/opt/local/XMM/ccf/","SAS_ODF"=>"$cwd/"*SumFile[1],"SAS_
 end
 
 #Reads in teh event files created and separates them into the posible multiple
-#observations for each detector 
+#exposures for each detector 
 EvFiles = filter(x -> occursin("Evts", x), readdir())
 EMOSEvts = filter(x -> occursin("EMOS", x), EvFiles)
 EMOS1Evts = filter(x -> occursin("EMOS1", x), EvFiles)
