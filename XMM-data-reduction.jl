@@ -1,5 +1,3 @@
-
-
 include("XMM-data-reduction-function.jl") 
 
 run_reduction(
