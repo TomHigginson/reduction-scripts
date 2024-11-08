@@ -1,11 +1,8 @@
 # reduction-scripts
 ## XXM-data-reduction
-A simple script created for automating the data reduction of XMM observations on typhon. 
-The program must be called in the <code>ODF</code> file containing the uncompressed observation files. It creates a new directory in the observation directory called <code>PROC</code> where all the events files are created. It also creates the filtered events files, according to the standard filters for XMM, and the light curve file for each exposure in the observation. 
-The program requires that <code>SAS</code>, and therefore <code>HEASOFT</code>, are initialised before it is called. This program is also meant to be run on the typhon server as it is currently hard coded to look for the calibration files there. 
-Be aware, it may take several tens of minutes (10-30) to complete the reduction for a large observations. interruptions may require the files created to be deleted before proceeding again. Creating a copy of the ODF directory is recommended when first using the script. 
+A simple script created for automating the data reduction of XMM observations on typhon. The script must be able to access the uncompressed observations files in the Observation Data File (`ODF`). The scrip is completely customisable as to where the output files are placed and where it looks for the `ODF`. By default, it will look in the current working directory for observation files and create an output directory above the current called `PROC`. All of this can be changed by calling the arguments `ODF_Path`, `OutDir` and `OutDirName` respectively (see implementation for full arguments list). `CCF_Path` defines the path to the calibration files required to run the SAS processes. `EM` and `EP` are Booleans which define if the processing is run for the MOS-CCD's and/or the pn-CCD respectively. `Filt` and `LtCrv` direct to create a the standard filtered events file and light curve for each exposure. `timebinsize` defines the size of time bins used for creating the light curve file.   
 
-This program will likely be expanded in the future to give the user more control on starting it, such as defining the location of calibration files, which detectors' reduction is run and what and where to write the output. There will also be summaries of the process progress and output created as it runs.  
+Please be aware, longer observations may take several tens of minutes (10-30min). Once the script is called, interrupting may require the created flies to be deleted before running again.
 
 ## Requirements
 In order to be able pass arguments from the command line when running code you need to have ArgParse in your julia environment. This can be added with
@@ -13,6 +10,7 @@ In order to be able pass arguments from the command line when running code you n
 Pkg.add("ArgParse")
 ```
 either added globally to your julia module or in your environment.
+Before the script is called `SAS` and therefore also `HESOFT` must be installed and initialised. 
 
 ## Implimentation
 The reducition code is run as follows:
@@ -25,10 +23,10 @@ julia XMM-data-reduction.jl --CCF_Path --ODF_Path --OutDir --OutDirName --EM --E
 | --- | --- |
 |  CCF_Path   |  "/opt/local/XMM/ccf/"   |
 |  ODF_Path   |  pwd()   |
-|  OutDirName   |  "PROC   |
+|  OutDirName   |  "PROC"   |
 |  OutDir   |  ".."   |
 |  EM   |  true   |
 |  EP   |  true   |
-|  filt   |  true   |
+|  Filt   |  true   |
 |  LtCrv   |  true   |
 |  timebinsize   |  100  [time in seconds] |
