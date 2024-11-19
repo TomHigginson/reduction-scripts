@@ -11,15 +11,15 @@ data = OGIPDataset(spectra, background=background, response=RMF, ancillary=ARF)
 regroup!(data)
 normalize!(data)
 drop_bad_channels!(data)
-mask_energies!(data, 0.5, 10.0)
+mask_energies!(data, 1.0, 10.0)
 data
-plot(data,xlims=(0.5, 10.0),yscale=:log10,xscale=:log10)
+plot(data,xlims=(1.0, 10.0),yscale=:log10,xscale=:log10)
 
-model = PhotoelectricAbsorption()*PowerLaw()
+model = BlackBody(kT = FitParam(0.1)) + PowerLaw()
 prob = FittingProblem(model => data)
 details(prob)
 
 result = fit(prob, LevenbergMarquadt())
 update_model!(model, result)
 
-plotresult(data, [result], xlims=(0.5, 10.0),yscale = :log10, xscale = :log10)
+plotresult(data, [result], xlims=(1.0, 10.0),yscale = :log10, xscale = :log10)
