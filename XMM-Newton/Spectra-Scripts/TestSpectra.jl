@@ -1,13 +1,13 @@
 using SpectralFitting, Plots, XSPECModels
 
-DATADIR = "/data/typhon2/DariusM/XMM_Data/IRAS13224-3809/0780560101/PROC"
-prefix = "EPN_U002_"
+DATADIR = "/data/typhon2/DariusM/XMM_Data/IRAS13224-3809/0780560101/PROC/prod"
+prefix = "EPN_S002_"
 spectra = joinpath(DATADIR, prefix*"src_spec.fits")
 background = joinpath(DATADIR, prefix*"bkg_spec.fits")
 RMF = joinpath(DATADIR, prefix*"src_rmf.fits")
 ARF = joinpath(DATADIR, prefix*"src_arf.fits")
 
-data = OGIPDataset(spectra,background = background,response = RMF,ancillary=ARF)
+data = OGIPDataset(spectra, background=background, response=RMF, ancillary=ARF)
 regroup!(data)
 normalize!(data)
 drop_bad_channels!(data)
