@@ -32,7 +32,7 @@ function parse_arguments()
             arg_type=Bool
             default=true
         "--LtCrv"
-            help="Create a light curve from events file"
+            help="Create a high energy light curve from the whole events file"
             arg_type=Bool
             default=true
         "--timebinsize"

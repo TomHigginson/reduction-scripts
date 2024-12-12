@@ -11,7 +11,7 @@
         EM = true,                        true or false as to if emproc command is run to process th files for the MOS instruments
         EP = true,                        true or false as to if epproc command is run to process th files for the PN instrument
         Filt = true,                      true or false as to if the standard filters are aplied to the output events file
-        LtCrv = true,                     true or false as to if a light curve is created from the output events file
+        LtCrv = true,                     true or false as to if a high energy light curve for the whole image is created from the output events file
         timebinsize = 100                 bin size for the output light curve if created
         )
 The above are chanable arguments as well as the default values they take. 
@@ -81,7 +81,7 @@ function run_reduction(;
             EMOSFiltName=EMOSSplit[3]*"_"*EMOSSplit[4]*"_StdFilt.fits"
             EMOSLtcrvName=EMOSSplit[3]*"_"*EMOSSplit[4]*"_LtCrv.fits"
             run(`evselect table=$EMOS filtertype=expression filteredset=$EMOSFiltName expression='(PATTERN <= 12) && (PI in [200:12000]) && #XMMEA_EM'`)
-            run(`evselect table=$EMOSFiltName withrateset=Y rateset=$EMOSLtcrvName maketimecolumn=Y timebinsize=$timebinsize makeratecolumn=yes`)
+            run(`evselect table=$EMOSFiltName withrateset=Y rateset=$EMOSLtcrvName maketimecolumn=Y timebinsize=$timebinsize makeratecolumn=yes expression='#XMMEA_EM && (PI>10000) && (PATTERN==0)'`)
         end
         for n in eachindex(EPNEvts);
             EPN=EPNEvts[n]
@@ -89,7 +89,7 @@ function run_reduction(;
             EPNFiltName=EPNSplit[3]*"_"*EPNSplit[4]*"_StdFilt.fits"
             EPNLtcrvName=EPNSplit[3]*"_"*EPNSplit[4]*"_LtCrv.fits"
             run(`evselect table=$EPN filtertype=expression filteredset=$EPNFiltName expression='(PATTERN <= 4)&&(PI in [200:15000])&&#XMMEA_EP&&(FLAG == 0)'`)
-            run(`evselect table=$EPNFiltName withrateset=Y rateset=$EPNLtcrvName maketimecolumn=Y timebinsize=$timebinsize makeratecolumn=yes`)
+            run(`evselect table=$EPNFiltName withrateset=Y rateset=$EPNLtcrvName maketimecolumn=Y timebinsize=$timebinsize makeratecolumn=yes expression='#XMMEA_EP && (PI>10000&&PI<12000) && (PATTERN==0)'`)
         end
     elseif Filt == true &&  LtCrv == false
         for n in eachindex(EMOSEvts);
@@ -111,7 +111,7 @@ function run_reduction(;
             EMOSLtcrvName=EMOSSplit[3]*"_"*EMOSSplit[4]*"_LtCrv.fits"
             EMOSName=EMOSSplit[3]*"_"*EMOSSplit[4]*".fits"
             cp(EMOS,EMOSName)
-            run(`evselect table=$EMOS withrateset=Y rateset=$EMOSLtcrvName maketimecolumn=Y timebinsize=$timebinsize makeratecolumn=yes`)
+            run(`evselect table=$EMOS withrateset=Y rateset=$EMOSLtcrvName maketimecolumn=Y timebinsize=$timebinsize makeratecolumn=yes expression='#XMMEA_EM && (PI>10000) && (PATTERN==0)'`)
         end
         for n in eachindex(EPNEvts);
             EPN=EPNEvts[n]
@@ -119,7 +119,7 @@ function run_reduction(;
             EPNLtcrvName=EPNSplit[3]*"_"*EPNSplit[4]*"_LtCrv.fits"
             EPNName=EPNSplit[3]*"_"*EPNSplit[4]*".fits"
             cp(EPN,EPNName)
-            run(`evselect table=$EPN withrateset=Y rateset=$EPNLtcrvName maketimecolumn=Y timebinsize=$timebinsize makeratecolumn=yes`)
+            run(`evselect table=$EPN withrateset=Y rateset=$EPNLtcrvName maketimecolumn=Y timebinsize=$timebinsize makeratecolumn=yes expression='#XMMEA_EP && (PI>10000&&PI<12000) && (PATTERN==0)'`)
         end
     elseif Filt == false &&  LtCrv == false
         for n in eachindex(EMOSEvts);
